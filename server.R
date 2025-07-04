@@ -92,8 +92,8 @@ function(input, output, session)
 																		base_amt = input$base_amt,
 																		tok_chg = input$tok_amt,
 																		base_chg = input$base_amt,
-																		price_iacs_eth = ((input$tok_amt*input$base_amt)/(input$tok_amt-1))-input$base_amt,
-																		price_eth_iacs = ((input$base_amt*input$tok_amt)/(input$base_amt-1))-input$tok_amt
+																		price_iacs_eth = ((as.numeric(input$tok_amt)*as.numeric(input$base_amt))/(as.numeric(input$tok_amt)-1))-as.numeric(input$base_amt),
+																		price_eth_iacs = ((as.numeric(input$base_amt)*as.numeric(input$tok_amt))/(as.numeric(input$base_amt)-1))-as.numeric(input$tok_amt)
 																	)
 									}
 				)
@@ -129,8 +129,8 @@ function(input, output, session)
 										if(nrow(pool_val$pool)==0) return(NULL)
 										if(input$swap_dir!="iacs_eth")
 										{
-											tok_amt <- tail(pool_val$pool$tok_amt,1)
-											base_amt <- tail(pool_val$pool$base_amt,1)
+											tok_amt <- as.numeric(tail(pool_val$pool$tok_amt,1))
+											base_amt <- as.numeric(tail(pool_val$pool$base_amt,1))
 											eth_cost = base_amt-((tok_amt*base_amt)/(tok_amt+input$sw_tok_amt))
 											return(h5(eth_cost))
 										} 
@@ -150,17 +150,17 @@ function(input, output, session)
 	observeEvent(input$tr_tok_amt_swap,{
 											if(nrow(pool_val$pool)>0)
 											{
-												tok_amt <- tail(pool_val$pool$tok_amt,1)
-												base_amt <- tail(pool_val$pool$base_amt,1)
-												tok_chg = input$sw_tok_amt
-												base_chg = input$sw_eth_amt
+												tok_amt <- as.numeric(tail(pool_val$pool$tok_amt,1))
+												base_amt <- as.numeric(tail(pool_val$pool$base_amt,1))
+												tok_chg = as.numeric(input$sw_tok_amt)
+												base_chg = as.numeric(input$sw_eth_amt)
 												if(input$swap_dir=="iacs_eth")
 												{
-													tok_chg = ((tok_amt*base_amt)/(base_amt+input$sw_eth_amt))-tok_amt
+													tok_chg = ((tok_amt*base_amt)/(base_amt+as.numeric(input$sw_eth_amt)))-tok_amt
 												}
 												if(input$swap_dir!="iacs_eth")
 												{
-													base_chg = ((tok_amt*base_amt)/(tok_amt+input$sw_tok_amt))-base_amt
+													base_chg = ((tok_amt*base_amt)/(tok_amt+as.numeric(input$sw_tok_amt)))-base_amt
 												}
 												tok_amt = tail(pool_val$pool$tok_amt,1) + tok_chg
 												base_amt = tail(pool_val$pool$base_amt,1) + base_chg
@@ -411,16 +411,16 @@ function(input, output, session)
 										t_idx <- paste0(c_idx,ifelse(t_tab[idx,c_idx]>=0,"P","N"))
 										if(!(t_idx %in% c("1N","1P","2N","2P","3N"))) trade_val$error <- "Invalid Trade"
 										
-										tok_amt <- tail(pool_val$pool$tok_amt,1)
-										base_amt <- tail(pool_val$pool$base_amt,1)
+										tok_amt <- as.numeric(tail(pool_val$pool$tok_amt,1))
+										base_amt <- as.numeric(tail(pool_val$pool$base_amt,1))
 
 										## Swap ETH for IACS
 										if(t_idx == "2N")
 										{
 											base_chg = t_tab[idx,c_idx]
 											tok_chg = ((tok_amt*base_amt)/(base_amt+base_chg))-tok_amt
-											tok_amt = tail(pool_val$pool$tok_amt,1) + tok_chg
-											base_amt = tail(pool_val$pool$base_amt,1) + base_chg
+											tok_amt = as.numeric(tail(pool_val$pool$tok_amt,1)) + tok_chg
+											base_amt = as.numeric(tail(pool_val$pool$base_amt,1)) + base_chg
 											trade_df = data.frame(
 																	trade = "IACS for ETH",
 																	tok_amt = tok_amt,
@@ -438,8 +438,8 @@ function(input, output, session)
 										{
 											tok_chg = t_tab[idx,c_idx]
 											base_chg = ((tok_amt*base_amt)/(tok_amt+tok_chg))-base_amt
-											tok_amt = tail(pool_val$pool$tok_amt,1) + tok_chg
-											base_amt = tail(pool_val$pool$base_amt,1) + base_chg
+											tok_amt = as.numeric(tail(pool_val$pool$tok_amt,1)) + tok_chg
+											base_amt = as.numeric(tail(pool_val$pool$base_amt,1)) + base_chg
 											trade_df = data.frame(
 																	trade = "ETH for IACS",
 																	tok_amt = tok_amt,
@@ -457,8 +457,8 @@ function(input, output, session)
 										{
 											tok_chg = t_tab[idx,c_idx]
 											base_chg = (base_amt/tok_amt)*tok_chg
-											tok_amt = tail(pool_val$pool$tok_amt,1) + tok_chg
-											base_amt = tail(pool_val$pool$base_amt,1) + base_chg
+											tok_amt = as.numeric(tail(pool_val$pool$tok_amt,1)) + tok_chg
+											base_amt = as.numeric(tail(pool_val$pool$base_amt,1)) + base_chg
 											trade_df = data.frame(
 																	trade = "Add Liquidity",
 																	tok_amt = tok_amt,
@@ -476,8 +476,8 @@ function(input, output, session)
 										{
 											base_chg = t_tab[idx,c_idx]
 											tok_chg = (tok_amt/base_amt)*base_chg
-											tok_amt = tail(pool_val$pool$tok_amt,1) + tok_chg
-											base_amt = tail(pool_val$pool$base_amt,1) + base_chg
+											tok_amt = as.numeric(tail(pool_val$pool$tok_amt,1)) + tok_chg
+											base_amt = as.numeric(tail(pool_val$pool$base_amt,1)) + base_chg
 											trade_df = data.frame(
 																	trade = "Add Liquidity",
 																	tok_amt = tok_amt,
@@ -495,8 +495,8 @@ function(input, output, session)
 										{
 											tok_chg = (t_tab[idx,c_idx]/100)*tok_amt
 											base_chg = (t_tab[idx,c_idx]/100)*base_amt
-											tok_amt = tail(pool_val$pool$tok_amt,1) + tok_chg
-											base_amt = tail(pool_val$pool$base_amt,1) + base_chg
+											tok_amt = as.numeric(tail(pool_val$pool$tok_amt,1)) + tok_chg
+											base_amt = as.numeric(tail(pool_val$pool$base_amt,1)) + base_chg
 											trade_df = data.frame(
 																	trade = "Remove Liquidity",
 																	tok_amt = tok_amt,
