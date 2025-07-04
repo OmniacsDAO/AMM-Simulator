@@ -1,0 +1,6 @@
+trade,iacs_chg,eth_chg,pct_chg
+Pay as much IACS required to swap and get 10 ETH from Pool,,-10,
+Pay as much ETH required to swap and get 10 IACS from Pool,-10,,
+Add Liquidity : Add 10 ETH and as many IACS required to add liquidity,,10,
+Add Liquidity : Add 10 IACS and as many ETH required to add liquidity,10,,
+Remove Liquidity : Remove 10 % of the liquidity,,,-10
