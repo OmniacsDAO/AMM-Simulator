@@ -10,7 +10,7 @@ A tiny Shiny dashboard that lets you play market-maker with a Uniswap-style cons
 
 ## What It Does
 
-* **Start a pool** with any mix of `IACS` (fake ERC-20) and `ETH`.
+* **Start a pool** with any mix of `IACS` and `ETH`.
 * **Trade either way** (ETH → IACS or IACS → ETH) one-off or by uploading a `trades.csv`.
 * **Add / remove liquidity** in tokens or by percentage.
 * **See it live**: token balances, price ratios, USD price, and a running trade ledger.
